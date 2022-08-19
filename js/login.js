@@ -1,3 +1,5 @@
+
+
 function login(){
     let email = document.getElementById('email').value;
     let password = document.getElementById('password').value;
@@ -20,4 +22,11 @@ document.addEventListener('DOMContentLoaded',()=> {
     document.getElementById('regBtn').addEventListener('click', () => {
         login();
     })
+    document.getElementById('email').addEventListener('keydown', () =>{
+        document.getElementById('email').classList.remove("is-invalid");
+    })
+    document.getElementById('password').addEventListener('keydown', () =>{
+        document.getElementById('password').classList.remove("is-invalid");
+    })
+
 })
