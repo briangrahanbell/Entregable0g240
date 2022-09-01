@@ -10,6 +10,8 @@ document.addEventListener("DOMContentLoaded", function(){
     if(usuario == null) {
         alert("Es necesario leguearse");
         location.href = "login.html";
+    }else{
+        document.getElementById('cerrarBtn').innerHTML = usuario;
     }
 
     document.getElementById("autos").addEventListener("click", function() {
