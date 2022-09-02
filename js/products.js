@@ -1,6 +1,7 @@
 let categoriesArray = [];
 
 function showCategoriesList(array){
+    
     let htmlContentToAppend = "";
 
     for(let i = 0; i < array.length; i++){ 
@@ -25,6 +26,10 @@ function showCategoriesList(array){
         </div>
         `
         document.getElementById("cat-list-container").innerHTML = htmlContentToAppend; 
+        document.getElementById('inicio').placeholder = category.currency;
+        document.getElementById('final').placeholder = category.currency;
+        document.getElementById('masCarosIcono').innerHTML = category.currency;
+        document.getElementById('masBaratosIcono').innerHTML = category.currency
     }
 }
 
@@ -32,27 +37,62 @@ function filtrar(){
     
     let inicio = document.getElementById('inicio');
     let final = document.getElementById('final');
-    
-    let filtrado = categoriesArray.filter(elemento => elemento.cost >= inicio.value && elemento.cost <= final.value);
-    showCategoriesList(filtrado);
+    let faltaAlgo = document.getElementById('invalidFiltro');
 
-
+    if(inicio.value === "" && final.value ===""){  
+        inicio.classList.add('is-invalid');  
+        faltaAlgo.innerHTML ="Ingrese los valores minimo y maximo para filtrar"
+    }else if(inicio.value ===""){
+        inicio.classList.add('is-invalid');
+        faltaAlgo.innerHTML = "ingrese valor minimo";  
+    }else if(final.value ===""){
+        final.classList.add('is-invalid'); 
+        faltaAlgo.innerHTML = "ingrese valor maximo"; 
+    }else{
+        let filtrado = categoriesArray.filter(elemento => elemento.cost >= inicio.value && elemento.cost <= final.value);
+        localStorage.setItem('listaFiltrada',JSON.stringify(filtrado));
+        showCategoriesList(filtrado);
+        inicio.value = "";
+        final.value = "";
+    }
 }
 
 function ordenAscendente(){
-    
-    let filtrado = categoriesArray.sort((ant,sig)=> ant.cost - sig.cost);
-    showCategoriesList(filtrado);
+    let miLista = [];
+    miLista = JSON.parse(localStorage.getItem('listaFiltrada')); 
+    if(miLista != null){
+        let filtradoOrdenado = miLista.sort((ant,sig)=> ant.cost - sig.cost);    
+        showCategoriesList(filtradoOrdenado);
+    }else{
+        let ordenSinFiltrar = categoriesArray.sort((ant,sig)=> ant.cost - sig.cost);
+        showCategoriesList(ordenSinFiltrar);
+    }
 }
 
 function ordenDescendente(){
-    let filtrado = categoriesArray.sort((ant,sig)=> sig.cost - ant.cost);
-    showCategoriesList(filtrado);
+    let miLista = [];
+    miLista = JSON.parse(localStorage.getItem('listaFiltrada'));
+    if(miLista != null){
+        let filtradoOrdenado = miLista.sort((ant,sig)=> sig.cost - ant.cost);    
+        showCategoriesList(filtradoOrdenado);
+    }else{
+        let ordenSinFiltrar = categoriesArray.sort((ant,sig)=> sig.cost - ant.cost);    
+        showCategoriesList(ordenSinFiltrar);
+    }
+
 }
 
 function masVendidos(){
-    let filtrado = categoriesArray.sort((ant,sig)=> sig.soldCount - ant.soldCount);
-    showCategoriesList(filtrado);
+    
+    let miLista = [];
+    miLista = JSON.parse(localStorage.getItem('listaFiltrada'));
+    if(miLista != null){
+        let filtradoOrdenado = miLista.sort((ant,sig)=> sig.soldCount - ant.soldCount);    
+        showCategoriesList(filtradoOrdenado);
+    }else{
+        let ordenSinFiltrar = categoriesArray.sort((ant,sig)=> sig.soldCount - ant.soldCount);    
+        showCategoriesList(ordenSinFiltrar);
+    }
 }
     
 
@@ -62,9 +102,11 @@ document.addEventListener("DOMContentLoaded", function(e){
     getJSONData(PRODUCTS_URL + cat + EXT_TYPE).then(function(resultObj){
         if (resultObj.status === "ok")
         {
+            document.getElementById('nombreCat').innerHTML = resultObj.data.catName;
             categoriesArray = resultObj.data.products;
             showCategoriesList(categoriesArray);
         }
+    
     });
     document.getElementById('filtrar').addEventListener('click', function(){
         filtrar();
@@ -76,9 +118,16 @@ document.addEventListener("DOMContentLoaded", function(e){
         ordenDescendente();
     });
     document.getElementById('sacarFiltros').addEventListener('click',function(){
+        localStorage.removeItem('listaFiltrada');
         showCategoriesList(categoriesArray);
     });
     document.getElementById('masVendidos').addEventListener('click',function(){
         masVendidos();
-    })
+    });
+    document.getElementById('inicio').addEventListener('keydown',function(){
+        this.classList.remove('is-invalid');
+    });
+    document.getElementById('final').addEventListener('keydown',function(){
+        this.classList.remove('is-invalid');
+    });
 });
