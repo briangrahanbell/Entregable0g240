@@ -7,6 +7,7 @@ function showCategoriesList(array){
     for(let i = 0; i < array.length; i++){ 
         let category = array[i];
         htmlContentToAppend += `
+        <div onclick="setProID(${category.id})" class="list-group-item list-group-item-action cursor-active">
         <div class="list-group-item list-group-item-action">
             <div class="row">
                 <div class="col-3">
@@ -23,6 +24,7 @@ function showCategoriesList(array){
 
                 </div>
             </div>
+        </div>
         </div>
         `
         document.getElementById("cat-list-container").innerHTML = htmlContentToAppend; 
@@ -95,8 +97,10 @@ function masVendidos(){
     }
 }
     
-
-
+function setProID(id) {
+    localStorage.setItem("proID", id);
+    window.location = "product-info.html"
+}
 document.addEventListener("DOMContentLoaded", function(e){
     let cat = localStorage.getItem('catID');
     getJSONData(PRODUCTS_URL + cat + EXT_TYPE).then(function(resultObj){
