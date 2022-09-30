@@ -101,6 +101,9 @@ function setProID(id) {
     localStorage.setItem("proID", id);
     window.location = "product-info.html"
 }
+
+
+
 document.addEventListener("DOMContentLoaded", function(e){
     let cat = localStorage.getItem('catID');
     getJSONData(PRODUCTS_URL + cat + EXT_TYPE).then(function(resultObj){
@@ -133,5 +136,26 @@ document.addEventListener("DOMContentLoaded", function(e){
     });
     document.getElementById('final').addEventListener('keydown',function(){
         this.classList.remove('is-invalid');
+    });
+    document.getElementById('buscador').addEventListener('input', function(e){
+        const miBuscador = document.getElementById('buscador');
+
+        miBuscador.textContent = e.target.value;
+    
+         let listaNombre = categoriesArray.filter(producto => producto.name.includes(miBuscador.textContent.toUpperCase()));
+        // let listaDescription = categoriesArray.filter(producto => producto.description.includes(miBuscador.textContent.toUpperCase()));  
+         //let lista = listaNombre.concat(listaDescription);
+        showCategoriesList(listaNombre);
+        /*						
+    let data = [1,2,6,1,2,5,9,'33','33'];
+
+    const result = [];
+    data.forEach((item)=>{
+    	//pushes only unique element
+        if(!uniqueArr.includes(item)){
+    		uniqueArr.push(item);
+    	}
+    })
+    console.log(result); //[1,2,6,5,9,'33']*/ 
     });
 });

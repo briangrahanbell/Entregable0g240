@@ -1,9 +1,3 @@
-function cerrar(){
-        localStorage.removeItem('user');
-        location.href="login.html";
-}
-
-
 document.addEventListener("DOMContentLoaded", function(){
     //cuando apenas ingreso 
     let usuario = localStorage.getItem("user");
@@ -11,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function(){
         alert("Es necesario leguearse");
         location.href = "login.html";
     }else{
-        document.getElementById('cerrarBtn').innerHTML = usuario;
+        document.getElementById('nuevoUsuario').innerHTML = usuario;
     }
 
     document.getElementById("autos").addEventListener("click", function() {
@@ -25,8 +19,5 @@ document.addEventListener("DOMContentLoaded", function(){
     document.getElementById("muebles").addEventListener("click", function() {
         localStorage.setItem("catID", 103);
         window.location = "products.html"
-    });
-    document.getElementById("cerrarBtn").addEventListener("click", function() {
-        cerrar();
     });
 });
